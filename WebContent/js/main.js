@@ -73,6 +73,7 @@ function getTech(){
 }
 
 function callbackForTechSupport(data){
+	console.log(data);
 	var iconBase = 'http://maps.google.com/mapfiles/kml/shapes/man.png';
 	LatLng = {lat: data[0].CustomerLat, lng: data[0].CustomerLng};
 	var marker = new google.maps.Marker({
@@ -113,14 +114,11 @@ function callbackForTechSupport(data){
 			  })
 		}
 	}
-	
 }
 
 function confirmTechMessage(data){
 	var tech_id = data.tech_id;
 	var tech_name = data.tech_name;
-	
-	document.getElementById("container").innerHTML="<h3>Your Technician Details<br><br>Technician ID: "+tech_id+"<br>Technician Name: "+ tech_name+"</h3>";
 	
 	$('<div "></div>').appendTo('body')
 	  .html('<div ">Your Technician has been confirmed.</div>')
@@ -129,6 +127,7 @@ function confirmTechMessage(data){
 	      width: '300px', resizable: false,
 	      buttons: {
 	          OK: function () {
+	        	  document.getElementById("container").innerHTML="<h3>Your Technician Details<br><br>Technician ID: "+tech_id+"<br>Technician Name: "+ tech_name+"</h3>";
 //	              doFunctionForYes();
 	              $(this).dialog("close");
 	          }
@@ -137,6 +136,25 @@ function confirmTechMessage(data){
 	          $(this).remove();
 	      }
 	});
+	deleteMarkers();
+	LatLng = {lat:data.lat,lng:data.lng};
+	var iconBase = 'http://maps.google.com/mapfiles/kml/shapes/man.png';
+	var icon = {
+		    url: "http://maps.google.com/mapfiles/kml/shapes/man.png", // url
+		    scaledSize: new google.maps.Size(40, 40), // scaled size
+		    origin: new google.maps.Point(0,0), // origin
+		    anchor: new google.maps.Point(0, 0) // anchor
+		};
+	var marker = new google.maps.Marker({
+		  id: tech_id,
+		  position: LatLng,
+		  map: map,
+		  title: tech_name,
+		  icon: icon,
+		  size: new google.maps.Size(22, 32)
+		});
+	markers.push(marker);
+	
 }
 
 //the smooth zoom function
